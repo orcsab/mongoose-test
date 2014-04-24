@@ -1,11 +1,25 @@
 var express = require('express');
 var port = process.env.PORT || 3002;
 var app = express();
+var util = require('util');
 
 var mongoose = require('mongoose');
 var photoMeta = require('./routes/photometa.js');
+var mdbConfig = require('./routes/mdb-config.js');
+util.debug("mdbConfig: " + JSON.stringify(mdbConfig));
 
-mongoose.connect('mongodb://mipitw:mipitw@oceanic.mongohq.com:10006/mipitw');
+var url = "mongodb://";
+url += mdbConfig.config.user;
+url += ":";
+url += mdbConfig.config.pass;
+url += "@";
+url += mdbConfig.config.server;
+url += ":";
+url += mdbConfig.config.port;
+url += "/"
+url += mdbConfig.config.collection;
+util.debug("url: " + url);
+mongoose.connect(url);
 // app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 
 app.listen(port, function() {
