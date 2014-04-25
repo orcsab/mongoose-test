@@ -28,9 +28,9 @@ app.listen(port, function() {
 
 app.get('/getPhotos', function (req, res) {
     // more on find: http://mongoosejs.com/docs/api.html#model_Model.find
-    photoMeta.find({}, 'user', function(err, photo) {
+    photoMeta.find({}, {}, function(err, meta) {
         if (err) { throw err;}
-        res.send(photo);
+        res.send(meta);
         // res.send('Hello world.');
     })
 });
