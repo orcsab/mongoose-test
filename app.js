@@ -23,7 +23,7 @@ util.debug("url: " + url);
 mongoose.connect(url);
 // app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
 
-util.debug("listening on port $port");
+util.debug("listening on port " + port);
 app.listen(port, function() {
     console.log("mongoose-test is listening on " + port);
 });
