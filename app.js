@@ -19,7 +19,7 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 app.use(allowCrossDomain);
-app.use(bodyParser());
+app.use(bodyParser({limit: '50mb'}));
 
 var aws = require('./routes/aws.js');
 var mongoose = require('mongoose');
