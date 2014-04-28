@@ -21,6 +21,7 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 app.use(bodyParser());
 
+var aws = require('./routes/aws.js');
 var mongoose = require('mongoose');
 var photoMeta = require('./routes/photometa.js');
 var mdbConfig = require('./routes/mdb-config.js');
@@ -57,18 +58,24 @@ app.get('/getPhotos', function (req, res) {
 app.post('/postPhoto', function(req, res) {
     console.log('POST /postPhoto');
     console.dir(req.body);
+    // console.dir(req.body.meta);
+    var date = new Date();
+    var key = req.body.meta.user + "-" + date;
     pm = new photoMeta({
-        _id: 45678,
-        creator: req.body.user,
-        date: req.body.date,
-        location: req.body.location,
-        caption: req.body.caption
+        _id: key,
+        creator: req.body.meta.user,
+        date: date,
+        location: req.body.meta.location,
+        caption: req.body.meta.caption
     });
 
     pm.save(function(err) {
         if (err) { throw err;}
-        res.send(pm);
     });
+
+    aws.loadImage(key, req.body.data);
+
+    res.send(key);
 });
 
 module.exports = app;

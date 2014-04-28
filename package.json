@@ -12,6 +12,7 @@
     "cookie-parser": "~1.0.1",
     "body-parser": "*",
     "debug": "~0.7.4",
-    "jade": "~1.3.0"
+    "jade": "~1.3.0",
+    "aws": "*"
   }
 }
