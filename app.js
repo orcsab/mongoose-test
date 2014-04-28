@@ -2,6 +2,7 @@ var express = require('express');
 var port = process.env.PORT || 4791;
 var app = express();
 var util = require('util');
+var bodyParser = require('body-parser');
 
 //  CORS setup.  Taken from http://stackoverflow.com/questions/11001817/allow-cors-rest-request-to-a-express-node-js-application-on-heroku
 var allowCrossDomain = function(req, res, next) {
@@ -18,7 +19,7 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 app.use(allowCrossDomain);
-
+app.use(bodyParser());
 
 var mongoose = require('mongoose');
 var photoMeta = require('./routes/photometa.js');
@@ -54,11 +55,14 @@ app.get('/getPhotos', function (req, res) {
 });
 
 app.post('/postPhoto', function(req, res) {
+    console.log('POST /postPhoto');
+    console.dir(req.body);
     pm = new photoMeta({
-        _id: "12345",
-        user: "Dave",
-        date: "7 June 1974",
-        location: "Singapore"
+        _id: 45678,
+        creator: req.body.user,
+        date: req.body.date,
+        location: req.body.location,
+        caption: req.body.caption
     });
 
     pm.save(function(err) {

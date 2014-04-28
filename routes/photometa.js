@@ -4,9 +4,10 @@ var objId = schema.ObjectId;
 
 var photoMetaSchema = new schema({
   _id: String,
-  user: String,
+  creator: String,
   date: String,
-  location: String
+  location: String,
+  caption: String
 },
 {collection: "photometa"});
 
