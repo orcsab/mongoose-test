@@ -3,7 +3,6 @@ var port = process.env.PORT || 4791;
 var app = express();
 var util = require('util');
 var bodyParser = require('body-parser');
-var gm = require("gm");
 
 //  CORS setup.  Taken from http://stackoverflow.com/questions/11001817/allow-cors-rest-request-to-a-express-node-js-application-on-heroku
 var allowCrossDomain = function(req, res, next) {
@@ -56,6 +55,7 @@ app.get('/getPhotos', function (req, res) {
     })
 });
 
+var gm = require('gm').subClass({ imageMagick: true });
 app.post('/postPhoto', function(req, res) {
     console.log('POST /postPhoto');
 
