@@ -7,3 +7,4 @@ node_modules/jade/
 node_modules/morgan/
 node_modules/static-favicon/
 node_modules/aws-sdk/
+node_modules/gm/

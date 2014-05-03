@@ -26,7 +26,7 @@ function loadImage (key, data) {
         throw err;
       }
       else
-        console.log("Successfully uploaded data to myBucket/myKey");
+        console.log("Successfully uploaded data to $process.env.AWS_BUCKET/$key");
     });
   });
 };

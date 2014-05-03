@@ -3,6 +3,7 @@ var port = process.env.PORT || 4791;
 var app = express();
 var util = require('util');
 var bodyParser = require('body-parser');
+var gm = require("gm");
 
 //  CORS setup.  Taken from http://stackoverflow.com/questions/11001817/allow-cors-rest-request-to-a-express-node-js-application-on-heroku
 var allowCrossDomain = function(req, res, next) {
@@ -57,8 +58,15 @@ app.get('/getPhotos', function (req, res) {
 
 app.post('/postPhoto', function(req, res) {
     console.log('POST /postPhoto');
-    console.dir(req.body);
-    // console.dir(req.body.meta);
+
+    var original = new Buffer(req.body.data);
+    var thumb = new Buffer();
+    //  This stuff is from here: https://www.npmjs.org/package/gm
+    gm(buffer).resize(200, 200).toBuffer(function (err, thumb) {
+        if (err) return handle(err);
+        console.log('/postPhoto: resize success');
+    });
+
     var date = new Date();
     var key = req.body.meta.user + "-" + date;
     pm = new photoMeta({
@@ -73,7 +81,8 @@ app.post('/postPhoto', function(req, res) {
         if (err) { throw err;}
     });
 
-    aws.loadImage(key, req.body.data);
+    aws.loadImage(key + "-orig", req.body.data);
+    aws.loadImage(key + "-thumb", thumb.toString());
 
     res.send(key);
 });
