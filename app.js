@@ -63,7 +63,10 @@ app.post('/postPhoto', function(req, res) {
     var thumb = new Buffer(1000000);
     //  This stuff is from here: https://www.npmjs.org/package/gm
     gm(original).resize(200, 200).toBuffer(function (err, thumb) {
-        if (err) return handle(err);
+        if (err) {
+            console.log('/postPhoto: resize failure' + err.toString());
+            return handle(err);
+        }
         console.log('/postPhoto: resize success');
     });
 
