@@ -59,8 +59,8 @@ app.get('/getPhotos', function (req, res) {
 app.post('/postPhoto', function(req, res) {
     console.log('POST /postPhoto');
 
-    var original = new Buffer(req.body.data.toString());
-    var thumb = new Buffer();
+    var original = new Buffer(req.body.data);
+    var thumb = new Buffer(1000000);
     //  This stuff is from here: https://www.npmjs.org/package/gm
     gm(buffer).resize(200, 200).toBuffer(function (err, thumb) {
         if (err) return handle(err);
