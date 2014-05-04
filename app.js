@@ -55,6 +55,27 @@ app.get('/getPhotos', function (req, res) {
     })
 });
 
+app.get('/getPhoto', function (req, res) {
+    console.log('GET /getPhoto with ' + JSON.stringify(req.query));
+    if (!req.query.type) {
+        throw "getPhoto called with no type (data/url)";
+    }
+    else if (req.query.type == 'url') {
+        console.log("GET /getPhoto for url");
+        aws.getUrl(req.query.key, res);
+    }
+    else if (req.query.type == 'data') {
+        console.log("GET /getPhoto for url");
+        aws.getObject(req.query.key, res);
+    }
+    else {
+        throw "getPhoto called with unknown type: " + req.query.type;
+    }
+
+    console.log('GET /getPhoto exiting');
+    // res.send(url);
+});
+
 var gm = require('gm').subClass({ imageMagick: true });
 app.post('/postPhoto', function(req, res) {
     console.log('POST /postPhoto');
@@ -84,8 +105,8 @@ app.post('/postPhoto', function(req, res) {
         if (err) { throw err;}
     });
 
-    aws.loadImage(key + "-orig", req.body.data);
-    aws.loadImage(key + "-thumb", thumb.toString());
+    aws.putObject(key + "-orig", req.body.data);
+    aws.putObject(key + "-thumb", thumb.toString());
 
     res.send(key);
 });
