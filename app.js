@@ -80,17 +80,6 @@ var gm = require('gm').subClass({ imageMagick: true });
 app.post('/postPhoto', function(req, res) {
     console.log('POST /postPhoto');
 
-    var original = new Buffer(req.body.data);
-    var thumb = new Buffer(1000000);
-    //  This stuff is from here: https://www.npmjs.org/package/gm
-    gm(original).resize(200, 200).toBuffer(function (err, thumb) {
-        if (err) {
-            console.log('/postPhoto: resize failure' + err.toString());
-            return handle(err);
-        }
-        console.log('/postPhoto: resize success');
-    });
-
     var date = new Date();
     var key = req.body.meta.user + "-" + date;
     pm = new photoMeta({
@@ -106,7 +95,16 @@ app.post('/postPhoto', function(req, res) {
     });
 
     aws.putObject(key + "-orig", req.body.data);
-    aws.putObject(key + "-thumb", thumb.toString());
+        var original = new Buffer(req.body.data, 'base64');
+    //  This stuff is from here: https://www.npmjs.org/package/gm
+    gm(original).resize(200, 200).toBuffer(function (err, data) {
+        if (err) {
+            console.log('/postPhoto: resize failure' + err.toString());
+            throw err;
+        }
+        aws.putObject(key + "-thumb", data.toString('base64'));
+        console.log('/postPhoto: resize success');
+    });
 
     res.send(key);
 });
